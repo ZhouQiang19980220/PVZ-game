@@ -17,7 +17,7 @@ import { initCanvas } from './systems/canvas.js';
 import { startLoop } from './systems/loop.js';
 import { attachInput } from './systems/input.js';
 import { scheduleFirstWave } from './systems/wave.js';
-import { initBgm, toggleBgm, setBgmVolume } from './systems/audio.js';
+import { initBgm } from './systems/audio.js';
 
 import {
     hideStartScreen,
@@ -108,8 +108,6 @@ async function bootstrap() {
     document.getElementById('btnEndless').addEventListener('click', () => initGame('endless'));
     document.getElementById('btnTest').addEventListener('click', () => initGame('test'));
     document.getElementById('btnRestart').addEventListener('click', () => location.reload());
-    document.getElementById('musicBtn').addEventListener('click', toggleBgm);
-    document.getElementById('volSlider').addEventListener('input', e => setBgmVolume(e.target.value));
 }
 
 bootstrap();

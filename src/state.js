@@ -13,6 +13,7 @@ export const state = {
     energies: [],
     particles: [],
     selectedPlant: null,
+    shoveling: false,
     correctCount: 0,
     grid: [],
     plantStats: {}
@@ -31,6 +32,7 @@ export function initState(mode, plantStats) {
     state.energies = [];
     state.particles = [];
     state.selectedPlant = null;
+    state.shoveling = false;
     state.correctCount = 0;
     state.plantStats = plantStats;
     initGrid();
@@ -48,8 +50,21 @@ export function setOver(b) { state.over = b; }
 export function incrementCorrectCount() { state.correctCount += 1; }
 
 // 选中态
-export function setSelectedPlant(p) { state.selectedPlant = p; }
+export function setSelectedPlant(p) { state.selectedPlant = p; state.shoveling = false; }
 export function clearSelectedPlant() { state.selectedPlant = null; }
+
+// 铲子
+export function setShoveling(b) { state.shoveling = b; if (b) state.selectedPlant = null; }
+
+// 移除植物（同步清 grid）
+export function removePlant(plant) {
+    state.plants = state.plants.filter(p => p !== plant);
+    for (let r = 0; r < CFG.ROWS; r++) {
+        for (let c = 0; c < CFG.COLS; c++) {
+            if (state.grid[r][c] === plant) state.grid[r][c] = null;
+        }
+    }
+}
 
 // 实体集合
 export function addPlant(p) { state.plants.push(p); }

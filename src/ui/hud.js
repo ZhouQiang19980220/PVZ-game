@@ -1,4 +1,4 @@
-import { state, setPaused } from '../state.js';
+import { state, setPaused, setShoveling } from '../state.js';
 import { updateCards } from './cards.js';
 import { openQuizBrowser, attachQuizBrowser } from './quiz-browser.js';
 
@@ -17,10 +17,16 @@ export function togglePause() {
 
 export function attachHudButtons() {
     document.getElementById('pauseBtn').addEventListener('click', togglePause);
+    document.getElementById('shovelBtn').addEventListener('click', toggleShovel);
     if (state.mode === 'test') {
         const btn = document.getElementById('quizBrowserBtn');
         btn.classList.remove('hidden');
         btn.addEventListener('click', openQuizBrowser);
         attachQuizBrowser();
     }
+}
+
+function toggleShovel() {
+    setShoveling(!state.shoveling);
+    document.getElementById('shovelBtn').classList.toggle('active-tool', state.shoveling);
 }

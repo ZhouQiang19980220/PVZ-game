@@ -17,14 +17,13 @@
     <source src="The_Last_Ledger.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 音乐控制器（始终悬浮在右上角） -->
-<div id="musicControl" class="fixed top-3 right-3 z-[110] flex items-center gap-2 bg-[var(--card)] border border-[var(--border)] rounded-xl px-3 py-2 opacity-80">
-    <button id="musicBtn" title="开关音乐">🎵</button>
-    <input type="range" id="volSlider" min="0" max="100" value="60" title="音量调节">
-</div>
 
 <!-- 开始界面 -->
 <div id="startScreen" class="relative z-10 min-h-screen flex items-center justify-center p-4">
+    <div class="fixed top-3 right-3 z-20 flex items-center gap-2 bg-[var(--card)] border border-[var(--border)] rounded-lg px-2 py-1" id="startMusicControl">
+        <button id="startMusicBtn" title="开关音乐" class="text-base leading-none">🎵</button>
+        <input type="range" id="startVolSlider" min="0" max="100" value="60" title="音量调节" class="vol-slider">
+    </div>
     <div class="text-center max-w-2xl w-full">
         <h1 class="game-title text-4xl md:text-5xl text-[var(--accent)] mb-3">知识大战难题</h1>
         <p class="text-[var(--muted)] mb-8">选择你的挑战模式</p>
@@ -100,10 +99,15 @@
                 <span class="font-bold text-[var(--accent)] ml-1" id="scoreNum">0</span>
             </div>
         </div>
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
              <span id="modeIndicator" class="text-xs text-[var(--muted)] bg-[var(--card)] px-2 py-1 rounded border border-[var(--border)] hidden md:block">经典模式</span>
              <button id="quizBrowserBtn" class="hidden text-xs px-2 py-1 rounded border border-dashed border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)]">📋 题目浏览</button>
+             <button id="shovelBtn" class="text-xs px-2 py-1 rounded border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)]">🪣 铲子</button>
              <button id="pauseBtn" class="text-xs px-2 py-1 rounded border border-[var(--border)] text-[var(--muted)] hover:text-[var(--fg)]">暂停</button>
+             <div id="musicControl" class="flex items-center gap-2 bg-[var(--card)] border border-[var(--border)] rounded-lg px-2 py-1">
+                 <button id="musicBtn" title="开关音乐" class="text-base leading-none">🎵</button>
+                 <input type="range" id="volSlider" min="0" max="100" value="60" title="音量调节">
+             </div>
         </div>
     </div>
 

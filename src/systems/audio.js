@@ -73,18 +73,37 @@ let _music = null;
 let _musicBtn = null;
 let _bgmEnabled = true;
 
+let _btns = [];
+let _sliders = [];
+
+function syncBtnState() {
+    const icon = _bgmEnabled ? '🎵' : '🔇';
+    _btns.forEach(b => {
+        b.textContent = icon;
+        b.classList.toggle('muted', !_bgmEnabled);
+    });
+}
+
+function syncSliderState(val) {
+    _sliders.forEach(s => { if (s.value != val) s.value = val; });
+}
+
 export function initBgm() {
     _music = document.getElementById('bgMusic');
-    _musicBtn = document.getElementById('musicBtn');
-    const slider = document.getElementById('volSlider');
 
-    _music.volume = slider.value / 100;
+    _btns = ['musicBtn', 'startMusicBtn'].map(id => document.getElementById(id)).filter(Boolean);
+    _sliders = ['volSlider', 'startVolSlider'].map(id => document.getElementById(id)).filter(Boolean);
 
-    // 浏览器 Autoplay Policy: 等首次用户交互
+    _music.volume = (_sliders[0]?.value ?? 60) / 100;
+
+    _btns.forEach(b => b.addEventListener('click', toggleBgm));
+    _sliders.forEach(s => s.addEventListener('input', () => {
+        setBgmVolume(s.value);
+        syncSliderState(s.value);
+    }));
+
     function tryPlay() {
-        if (_bgmEnabled && _music.paused) {
-            _music.play().catch(() => {});
-        }
+        if (_bgmEnabled && _music.paused) _music.play().catch(() => {});
         document.removeEventListener('click', tryPlay);
         document.removeEventListener('keydown', tryPlay);
     }
@@ -96,28 +115,19 @@ export function toggleBgm() {
     _bgmEnabled = !_bgmEnabled;
     if (_bgmEnabled) {
         _music.play().catch(() => {});
-        _musicBtn.textContent = '🎵';
-        _musicBtn.classList.remove('muted');
     } else {
         _music.pause();
-        _musicBtn.textContent = '🔇';
-        _musicBtn.classList.add('muted');
     }
+    syncBtnState();
 }
 
 export function setBgmVolume(val) {
     _music.volume = val / 100;
     if (val == 0) {
-        _musicBtn.textContent = '🔇';
-        _musicBtn.classList.add('muted');
         _bgmEnabled = false;
     } else if (!_bgmEnabled) {
         _bgmEnabled = true;
-        _musicBtn.textContent = '🎵';
-        _musicBtn.classList.remove('muted');
         _music.play().catch(() => {});
-    } else {
-        _musicBtn.textContent = '🎵';
-        _musicBtn.classList.remove('muted');
     }
+    syncBtnState();
 }

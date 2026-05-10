@@ -5,7 +5,9 @@ import {
     addPlant,
     setGridCell,
     isCellEmpty,
-    clearSelectedPlant
+    clearSelectedPlant,
+    setShoveling,
+    removePlant
 } from '../state.js';
 import { getCanvas } from './canvas.js';
 import { createPlant } from '../entities/plant.js';
@@ -19,7 +21,7 @@ export function attachInput() {
 }
 
 function handleCanvasClick(e) {
-    if (!state.selectedPlant || state.paused || state.over) return;
+    if (state.paused || state.over) return;
 
     const canvas = getCanvas();
     const rect = canvas.getBoundingClientRect();
@@ -29,6 +31,19 @@ function handleCanvasClick(e) {
     const row = Math.floor(y / (CFG.CELL_H * CFG.scale));
 
     if (col < 0 || col >= CFG.COLS || row < 0 || row >= CFG.ROWS) return;
+
+    if (state.shoveling) {
+        const plant = state.grid[row][col];
+        if (plant) {
+            removePlant(plant);
+            setShoveling(false);
+            document.getElementById('shovelBtn').classList.remove('active-tool');
+            updateHud();
+        }
+        return;
+    }
+
+    if (!state.selectedPlant) return;
     if (!isCellEmpty(row, col)) return;
 
     const template = state.selectedPlant;
